@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
@@ -77,4 +78,26 @@ class TransactionController extends Controller
         return ResponseFormatter::success($transaction,'Transaksi berhasil');
     }
 
+    public function updatePayment(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(['error'=>$validator->errors()], 'Update Payment Fails', 401);
+        }
+
+        if ($request->file('file')) {
+
+            $file = $request->file->store('assets/payment', 'public');
+
+            $transaction = Transactions::findOrFail($id);
+                
+            $transaction->payment = $file;
+            $transaction->update();
+
+            return ResponseFormatter::success([$file],'File successfully uploaded');
+        }
+    }
 }

@@ -43,9 +43,4 @@ class Transactions extends Model
         return Carbon::parse($updated_at)
             ->getPreciseTimestamp(3);
     }
-
-    public function getPaymentAttribute()
-    {
-        return config('app.url'). Storage::url($this->attributes['payment']);
-    }
 }

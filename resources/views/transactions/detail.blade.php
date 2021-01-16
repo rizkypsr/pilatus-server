@@ -63,7 +63,7 @@
                             <div class="w-5/6">
                                 <div class="text-sm">Payment URL</div>
                                 <div class="text-lg">
-                                    <a href="{{ $item->payment }}">{{ $item->payment }}</a>
+                                    <a href="{{ config('app.url'). Storage::url($item->payment) }}">{{ $item->payment ?: "-" }}</a>
                                 </div>
                             </div>
                             <div class="w-1/6">

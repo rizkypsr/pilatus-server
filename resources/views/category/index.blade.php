@@ -27,7 +27,7 @@
                             <tr>
                                 <td class="border px-6 py-4">{{ $item->id }}</td>
                                 <td class="border px-6 py-4 ">
-                                    {{ $item->picturePath }}
+                                    <img src="{{ $item->picturePath }}" alt="-" class="w-14">
                                 </td>
                                 <td class="border px-6 py-4">{{ $item->name }}</td>
                                 <td class="border px-6 py- text-center">

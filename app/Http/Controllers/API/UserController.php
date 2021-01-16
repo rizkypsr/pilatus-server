@@ -92,9 +92,16 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        $token = $request->user()->currentAccessToken()->delete();
+        try {
+            $token = $request->user()->currentAccessToken()->delete();
 
-        return ResponseFormatter::success($token,'Token Revoked');
+            return ResponseFormatter::success($token,'Token Revoked');
+        } catch(Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something went wrong',
+                'error' => $error,
+            ],'Unauthenticated', 401);
+        }
     }
 
     public function updateProfile(Request $request)
@@ -110,7 +117,7 @@ class UserController extends Controller
     public function updatePhoto(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|image|max:2048',
+            'file' => 'required|image',
         ]);
 
         if ($validator->fails()) {
@@ -123,7 +130,7 @@ class UserController extends Controller
 
             //store your file into database
             $user = Auth::user();
-            $user->profile_photo_path = $file;
+            $user->picturePath = $file;
             $user->update();
 
             return ResponseFormatter::success([$file],'File successfully uploaded');
